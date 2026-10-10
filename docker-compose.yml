@@ -1,4 +1,10 @@
 services:
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+
   psql_bp:
     image: pgvector/pgvector:pg17
     restart: unless-stopped

@@ -1,3 +1,4 @@
+import os
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 
@@ -5,7 +6,7 @@ class Serv(BaseHTTPRequestHandler):
 
     def do_GET(self):
         if self.path == "/":
-            self.path = "/test.html"
+            self.path = "/html/index.html"
         try:
             file_to_open = open("public/" + self.path[1:]).read()
             self.send_response(200)
@@ -16,5 +17,8 @@ class Serv(BaseHTTPRequestHandler):
         self.wfile.write(bytes(file_to_open, "utf-8"))
 
 
-httpd = HTTPServer(("localhost", 8080), Serv)
+HOST = os.environ.get("HOST", "localhost")
+PORT = int(os.environ.get("PORT", 8080))
+
+httpd = HTTPServer((HOST, PORT), Serv)
 httpd.serve_forever()
