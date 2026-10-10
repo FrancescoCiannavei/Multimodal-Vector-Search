@@ -2,8 +2,10 @@ package server
 
 import (
 	"encoding/json"
-	"log"
+	"html/template"
 	"net/http"
+
+	"Multimodal-Vector-Search/internal/static"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -22,23 +24,23 @@ func (s *Server) RegisterRoutes() http.Handler {
 		MaxAge:           300,
 	}))
 
-	r.Get("/", s.HelloWorldHandler)
-
+	r.Get("/", s.HomeHandler)
 	r.Get("/health", s.healthHandler)
+
+	r.Handle("/html/*", http.FileServerFS(static.Files))
+	r.Handle("/js/*", http.FileServerFS(static.Files))
+	r.Handle("/css/*", http.FileServerFS(static.Files))
 
 	return r
 }
 
-func (s *Server) HelloWorldHandler(w http.ResponseWriter, r *http.Request) {
-	resp := make(map[string]string)
-	resp["message"] = "Hello World"
-
-	jsonResp, err := json.Marshal(resp)
-	if err != nil {
-		log.Fatalf("error handling JSON marshal. Err: %v", err)
+func (s *Server) HomeHandler(w http.ResponseWriter, r *http.Request) {
+	var homeTmpl = template.Must(template.ParseFS(static.Files, "html/index.html"))
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	data := struct{ Title, Heading string }{"Home", "test"}
+	if err := homeTmpl.Execute(w, data); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-
-	_, _ = w.Write(jsonResp)
 }
 
 func (s *Server) healthHandler(w http.ResponseWriter, r *http.Request) {
