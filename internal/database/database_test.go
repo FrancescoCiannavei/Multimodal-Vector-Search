@@ -20,7 +20,7 @@ func mustStartPostgresContainer() (func(context.Context, ...testcontainers.Termi
 
 	dbContainer, err := postgres.Run(
 		context.Background(),
-		"postgres:latest",
+		"pgvector/pgvector:pg17",
 		postgres.WithDatabase(dbName),
 		postgres.WithUsername(dbUser),
 		postgres.WithPassword(dbPwd),
