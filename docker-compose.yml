@@ -14,6 +14,22 @@ services:
       DB_PORT: 5432
     depends_on:
       - psql_bp
+    # Live reload while developing: run `docker compose up --watch` (ignored by a plain `up`)
+    develop:
+      watch:
+        # Frontend files are read from disk on every request, so copying them in is enough
+        - path: ./public
+          target: /app/public
+          action: sync
+        # Python changes need the app restarted; the next search reloads the model (~5 s)
+        - path: ./src
+          target: /app/src
+          action: sync+restart
+          ignore:
+            - requirements.txt
+            - __pycache__/
+        - path: ./src/requirements.txt
+          action: rebuild
 
   psql_bp:
     image: pgvector/pgvector:pg17

@@ -15,10 +15,11 @@ RUN pip install --no-cache-dir torch torchvision torchcodec --index-url https://
 COPY src/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY src/ src/
-COPY public/ public/
-
 RUN useradd --create-home appuser
+
+COPY --chown=appuser:appuser src/ src/
+COPY --chown=appuser:appuser public/ public/
+
 USER appuser
 
 # Created as appuser so the model-cache volume mounted here is writable
