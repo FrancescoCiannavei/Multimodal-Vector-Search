@@ -36,11 +36,11 @@ def retriveSeedFiles():
 def titleFromPath(path):
 	return splitext(basename(path))[0].replace("-", " ").replace("_", " ")
 
-# TODO: allow seeding of only certain files
-# Example: we upload "magnus-carlsen.jpg" and we want to seed only that 1 file
-def seed():
-	print("Seeding...")
-	files = retriveSeedFiles()
+# Seeds the given paths, or every file under data/ when none are given
+def seed(files=None):
+	if files is None:
+		files = retriveSeedFiles()
+
 	total = len(files)
 	yield {"event": "start", "total": total}
 

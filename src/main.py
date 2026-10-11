@@ -1,7 +1,8 @@
 import json
 import logging
+from typing import Annotated
 
-from fastapi import FastAPI, UploadFile
+from fastapi import FastAPI, Query, UploadFile
 from fastapi.responses import FileResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from seed import seed
@@ -16,11 +17,15 @@ def health():
     return {"status": "ok"}
 
 #! Warning, for production enviroments you might want to protect this route.
+# Using the files query param you can easly seed new content without truncating the table and seeding one more time
+# Example: /api/seed?files=data/text/coffee.txt&files=data/text/chess.txt
 @app.get("/api/seed")
-def run_seed():
+def run_seed(files: Annotated[list[str] | None, Query()] = None):
+    print("testsetwetwet1231231231")
+    print(files)
     def events():
         try:
-            for event in seed():
+            for event in seed(files):
                 yield json.dumps(event) + "\n"
         except Exception as e:
             logger.exception("Seeding failed")
