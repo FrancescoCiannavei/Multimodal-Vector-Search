@@ -8,10 +8,10 @@ def retrive(query, limit=10):
         return []
 
     rows = runSql("""
-        SELECT id, path, modality
+        SELECT id, path, modality, embedding <=> %(query)s AS distance
         FROM documents
         WHERE embedding <=> %(query)s < %(maxDistance)s
-        ORDER BY embedding <=> %(query)s
+        ORDER BY distance
         LIMIT %(limit)s
     """, {
         "query": embedQuery(query),
@@ -25,6 +25,7 @@ def retrive(query, limit=10):
             "file": path,
             "modality": modality,
             "title": titleFromPath(path),
+            "distance": distance,
         }
-        for row_id, path, modality in rows
+        for row_id, path, modality, distance in rows
     ]
