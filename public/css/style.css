@@ -1,4 +1,232 @@
-#results .element{
+/* ===== Reset ===== */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+* {
+	margin: 0;
+}
+
+html {
+	-webkit-text-size-adjust: 100%;
+	text-size-adjust: 100%;
+}
+
+body {
+	min-height: 100vh;
+	/* dvh follows the mobile browser's visible area as its toolbars show and hide */
+	min-height: 100dvh;
+	line-height: 1.5;
+	-webkit-font-smoothing: antialiased;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+	display: block;
+	max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+	font: inherit;
+	color: inherit;
+}
+
+p,
+h1,
+h2,
+h3 {
+	overflow-wrap: break-word;
+}
+
+/* ===== Base ===== */
+:root {
+	--color-bg: #f5f6f8;
+	--color-surface: #ffffff;
+	--color-text: #1c2230;
+	--color-muted: #5e6a7a;
+	--color-border: #dce0e6;
+	--color-accent: #2f5bea;
+	--color-accent-soft: #e8eefd;
+	--radius: 10px;
+}
+
+body {
+	/* Column layout so the footer sits at the bottom even when there are no results */
 	display: flex;
 	flex-direction: column;
+	font-family: "Barlow", system-ui, sans-serif;
+	background: var(--color-bg);
+	color: var(--color-text);
+}
+
+.wrapper {
+	width: 100%;
+	max-width: 1100px;
+	margin-inline: auto;
+	padding: 32px 16px;
+}
+
+main {
+	flex: 1;
+}
+
+h1 {
+	font-size: 32px;
+	font-weight: 700;
+	line-height: 1.2;
+	margin-bottom: 16px;
+}
+
+/* ===== Search form ===== */
+#searchForm {
+	display: flex;
+	gap: 8px;
+}
+
+#searchInput {
+	flex: 1;
+	min-width: 0;
+	padding: 10px 14px;
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius);
+	background: var(--color-surface);
+}
+
+#searchButton {
+	padding: 10px 20px;
+	border: 0;
+	border-radius: var(--radius);
+	background: var(--color-accent);
+	color: #ffffff;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+#searchInput:focus-visible,
+#searchButton:focus-visible {
+	outline: 2px solid var(--color-accent);
+	outline-offset: 2px;
+}
+
+#searchInput:disabled,
+#searchButton:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+#status {
+	/* Reserves the line so the results don't jump when "Loading..." appears */
+	min-height: 24px;
+	margin: 12px 0;
+	color: var(--color-muted);
+}
+
+/* ===== Results ===== */
+#results {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+	gap: 16px;
+}
+
+#results .element {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	padding: 12px;
+	background: var(--color-surface);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius);
+}
+
+.element .file img,
+.element .file video {
+	width: 100%;
+	aspect-ratio: 16 / 9;
+	object-fit: cover;
+	border-radius: calc(var(--radius) - 4px);
+	background: #000000;
+}
+
+.element .file audio {
+	width: 100%;
+}
+
+.element .excerpt {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 6;
+	line-clamp: 6;
+	overflow: hidden;
+	color: var(--color-muted);
+	font-size: 15px;
+}
+
+.element .title {
+	font-weight: 600;
+	text-transform: capitalize;
+}
+
+.element .meta {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+	font-size: 14px;
+	color: var(--color-muted);
+	margin-top: auto;
+}
+
+.element .modality {
+	padding: 2px 8px;
+	border-radius: 999px;
+	background: var(--color-accent-soft);
+	color: var(--color-accent);
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.element .id {
+	margin-left: auto;
+}
+
+/* ===== Footer ===== */
+.footer {
+	padding: 16px;
+	border-top: 1px solid var(--color-border);
+	text-align: center;
+	font-size: 14px;
+	color: var(--color-muted);
+}
+
+.footer a {
+	color: inherit;
+	text-underline-offset: 2px;
+}
+
+.footer a:hover {
+	color: var(--color-accent);
+}
+
+.footer .separator {
+	margin-inline: 6px;
+}
+
+/* On narrow screens: name on its own line, both links on the next (no dangling "·") */
+@media (max-width: 600px) {
+	.footer .credit {
+		display: block;
+	}
+
+	.footer .credit-separator {
+		display: none;
+	}
 }

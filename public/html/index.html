@@ -4,27 +4,29 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Search</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap" />
 		<link rel="stylesheet" href="/css/style.css" />
 	</head>
 	<body>
-		<h1>Search</h1>
-		<form method="get" id="searchForm">
-			<input type="text" name="searchInput" id="searchInput" />
-			<button type="submit">Search</button>
-		</form>
-		<div id="results">
-			<div class="element">
-				<span class="id">51</span>
-				<span class="file video">
-					<video width="320" height="240" controls>
-						<source src="/data/video/gundam/mobile-suit-gundam-1979-opening-480p.mp4" type="video/mp4" />
-						Your browser does not support the video tag.
-					</video>
-				</span>
-				<span class="modality">video</span>
-				<span class="title">mobile suit gundam 1979 opening 480p</span>
-			</div>
-		</div>
+		<main class="wrapper">
+			<h1>Search</h1>
+			<form method="get" id="searchForm">
+				<input type="search" name="searchInput" id="searchInput" placeholder="Try &quot;Coffee&quot;, &quot;Gundam&quot; or &quot;Volcano&quot;" autocomplete="off" required />
+				<button type="submit" id="searchButton">Search</button>
+			</form>
+			<p id="status" aria-live="polite"></p>
+			<div id="results"></div>
+		</main>
+
+		<footer class="footer">
+			<span class="credit">Demo by Francesco Ciannavei</span>
+			<span class="separator credit-separator">·</span>
+			<a target="_blank" href="https://www.ciannavei.dev">ciannavei.dev</a>
+			<span class="separator">·</span>
+			<a target="_blank" href="https://github.com/FrancescoCiannavei">github.com/FrancescoCiannavei</a>
+		</footer>
 
 		<script src="/js/script.js"></script>
 	</body>
