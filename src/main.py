@@ -4,6 +4,7 @@ from fastapi import FastAPI, UploadFile
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from seed import seed
+from retrive import retrive
 
 logger = logging.getLogger(__name__)
 
@@ -13,6 +14,7 @@ app = FastAPI()
 def health():
     return {"status": "ok"}
 
+#! Warning, for production enviroments you might want to protect this route.
 @app.get("/api/seed")
 def run_seed():
     try:
@@ -27,20 +29,11 @@ def run_seed():
 
 @app.get("/api/retrive")
 def run_retrive(q):
+    results = retrive(q, 10)
+    print(results)
     return {
         "query": q,
-        "results": [
-            {
-				"id": 1,
-				"file": "data/text/chess.txt",
-    			"modality": "text",
-			},
-            {
-				"id": 3,
-				"file": "data/audio/coffee/coffee-grinder.mp3",
-    			"modality": "audio",
-			},
-		]
+        "results": results
 	}
 
 @app.get("/")
