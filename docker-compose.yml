@@ -21,6 +21,9 @@ services:
         - path: ./public
           target: /app/public
           action: sync
+          ignore:
+            # Symlink to ../data, which is already mounted; syncing it would copy every media file in
+            - data
         # Python changes need the app restarted; the next search reloads the model (~5 s)
         - path: ./src
           target: /app/src

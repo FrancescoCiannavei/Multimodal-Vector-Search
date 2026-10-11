@@ -1,11 +1,31 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
-</head>
-<body>
-	<h1>test123</h1>
-</body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Search</title>
+		<link rel="stylesheet" href="/css/style.css" />
+	</head>
+	<body>
+		<h1>Search</h1>
+		<form method="get" id="searchForm">
+			<input type="text" name="searchInput" id="searchInput" />
+			<button type="submit">Search</button>
+		</form>
+		<div id="results">
+			<div class="element">
+				<span class="id">51</span>
+				<span class="file video">
+					<video width="320" height="240" controls>
+						<source src="/data/video/gundam/mobile-suit-gundam-1979-opening-480p.mp4" type="video/mp4" />
+						Your browser does not support the video tag.
+					</video>
+				</span>
+				<span class="modality">video</span>
+				<span class="title">mobile suit gundam 1979 opening 480p</span>
+			</div>
+		</div>
+
+		<script src="/js/script.js"></script>
+	</body>
 </html>

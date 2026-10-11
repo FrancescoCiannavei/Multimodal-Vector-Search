@@ -41,4 +41,4 @@ def index():
     return FileResponse("public/html/index.html")
 
 # Routes above take priority, so the static mount must come last
-app.mount("/", StaticFiles(directory="public"), name="public")
+app.mount("/", StaticFiles(directory="public", follow_symlink=True), name="public")
