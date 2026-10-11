@@ -21,8 +21,6 @@ def health():
 # Example: /api/seed?files=data/text/coffee.txt&files=data/text/chess.txt
 @app.get("/api/seed")
 def run_seed(files: Annotated[list[str] | None, Query()] = None):
-    print("testsetwetwet1231231231")
-    print(files)
     def events():
         try:
             for event in seed(files):
