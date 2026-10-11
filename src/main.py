@@ -1,7 +1,8 @@
+import json
 import logging
 
 from fastapi import FastAPI, UploadFile
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from seed import seed
 from retrive import retrive
@@ -17,15 +18,19 @@ def health():
 #! Warning, for production enviroments you might want to protect this route.
 @app.get("/api/seed")
 def run_seed():
-    try:
-        count = seed()
-    except Exception as e:
-        logger.exception("Seeding failed")
-        return JSONResponse(
-            status_code=500,
-            content={"message": f"Seeding failed: {e}", "success": False},
-        )
-    return {"message": f"Seeded {count} files", "success": True}
+    def events():
+        try:
+            for event in seed():
+                yield json.dumps(event) + "\n"
+        except Exception as e:
+            logger.exception("Seeding failed")
+            yield json.dumps({"event": "error", "message": f"Seeding failed: {e}", "success": False}) + "\n"
+
+    return StreamingResponse(
+        events(),
+        media_type="text/plain",
+        headers={"X-Content-Type-Options": "nosniff"},
+    )
 
 @app.get("/api/retrive")
 def run_retrive(q):

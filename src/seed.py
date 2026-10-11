@@ -41,10 +41,13 @@ def titleFromPath(path):
 def seed():
 	print("Seeding...")
 	files = retriveSeedFiles()
+	total = len(files)
+	yield {"event": "start", "total": total}
+
 	for i, path in enumerate(files, start=1):
 		modality = MODALITY_BY_EXTENSION[splitext(path)[1].lower()]
 
-		print(f"[{i}/{len(files)}] {modality}: {path}")
+		print(f"[{i}/{total}] {modality}: {path}")
 		if modality == "text":
 			with open(path, encoding="utf-8") as f:
 				embedding = embedText(titleFromPath(path), f.read())
@@ -59,9 +62,11 @@ def seed():
 				modality = EXCLUDED.modality,
 				embedding = EXCLUDED.embedding
 		""", (path, modality, embedding))
+		yield {"event": "progress", "current": i, "total": total, "modality": modality, "path": path}
 
-	print(f"Seeded {len(files)} files")
-	return len(files)
+	print(f"Seeded {total} files")
+	yield {"event": "done", "message": f"Seeded {total} files", "success": True, "count": total}
 
 if __name__ == "__main__":
-	seed()
+	for _ in seed():
+		pass
