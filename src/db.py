@@ -1,41 +1,25 @@
 from os import environ
 import psycopg2
+from pgvector.psycopg2 import register_vector
 
 def connectDb():
-    return psycopg2.connect(
-        host = environ["DB_HOST"],
-        database = environ["DB_DATABASE"],
-        user = environ["DB_USERNAME"],
-        password = environ["DB_PASSWORD"],
-        port = environ["DB_PORT"]
-    )
+	conn = psycopg2.connect(
+		host = environ["DB_HOST"],
+		database = environ["DB_DATABASE"],
+		user = environ["DB_USERNAME"],
+		password = environ["DB_PASSWORD"],
+		port = environ["DB_PORT"]
+	)
+	# Lets numpy arrays be written to and read from VECTOR columns
+	register_vector(conn)
+	return conn
 
-# TODO: Find a better way to make sure the table exists before we start running SQL
-# Maybe we can run it as a migration with docker-compose.yaml
-def prepareTable():
+def runSql(sql, params=None):
 	conn = connectDb()
-	cur = conn.cursor()
-	cur.execute("""
-			CREATE TABLE IF NOT EXISTS documents (
-				id SERIAL PRIMARY KEY,
-				title TEXT,
-				content TEXT,
-				embedding VECTOR(768)
-			);
-		""")
-	conn.commit()
-	cur.close()
-	conn.close()
-
-def runSql(sql):
-	prepareTable()
-	conn = connectDb()
-	cur = conn.cursor()
-	cur.execute(sql)
-
-	rows = cur.fetchall()
-	for row in rows:
-		print(f"Title: {row[0]}, Content: {row[1]}, Embedding Dimensions: {row[2]}")
-	
-	cur.close()
-	conn.close()
+	try:
+		# `with conn` commits on success and rolls back on error, but does not close the connection
+		with conn, conn.cursor() as cur:
+			cur.execute(sql, params)
+			return cur.fetchall() if cur.description else None
+	finally:
+		conn.close()

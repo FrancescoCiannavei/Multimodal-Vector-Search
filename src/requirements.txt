@@ -1,2 +1,6 @@
 fastapi[standard]
 psycopg2-binary
+pgvector
+sentence-transformers>=6.1.0
+# Torchvision's decoder can't read .avif
+Pillow

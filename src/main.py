@@ -13,21 +13,35 @@ app = FastAPI()
 def health():
     return {"status": "ok"}
 
-@app.get("/api/search")
-def search(q: str):
-    return {"query": q, "results": []}
-
 @app.get("/api/seed")
 def run_seed():
     try:
-        seed()
+        count = seed()
     except Exception as e:
         logger.exception("Seeding failed")
         return JSONResponse(
             status_code=500,
             content={"message": f"Seeding failed: {e}", "success": False},
         )
-    return {"message": "Seeded", "success": True}
+    return {"message": f"Seeded {count} files", "success": True}
+
+@app.get("/api/retrive")
+def run_retrive(q):
+    return {
+        "query": q,
+        "results": [
+            {
+				"id": 1,
+				"file": "data/text/chess.txt",
+    			"modality": "text",
+			},
+            {
+				"id": 3,
+				"file": "data/audio/coffee/coffee-grinder.mp3",
+    			"modality": "audio",
+			},
+		]
+	}
 
 @app.get("/")
 def index():

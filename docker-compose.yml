@@ -6,6 +6,8 @@ services:
       - "8080:8080"
     volumes:
       - ./data:/app/data:ro
+      # Keeps the ~1.5 GB EmbeddingGemma 2 download across container rebuilds
+      - hf_cache:/home/appuser/.cache/huggingface
     env_file: .env
     environment:
       DB_HOST: psql_bp
@@ -42,3 +44,4 @@ services:
 volumes:
   psql_volume_bp:
   pgadmin_data:
+  hf_cache:
