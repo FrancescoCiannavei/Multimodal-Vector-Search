@@ -1,7 +1,7 @@
 from os import walk
 from os.path import basename, join, splitext
 from db import runSql
-from embeddings import embedAudio, embedImage, embedText, embedVideo
+from embed.manager import embedAudio, embedImage, embedText, embedVideo
 
 MODALITY_BY_EXTENSION = {
 	".txt": "text",
