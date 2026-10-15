@@ -1,7 +1,12 @@
-from os import walk
-from os.path import basename, join, splitext
-from db import runSql
-from embed.manager import embedAudio, embedImage, embedText, embedVideo
+from errno import ENOENT
+from os import strerror, walk
+from os.path import basename, join, normpath, splitext
+from random import uniform
+from time import sleep
+
+# Demo replacement for src/seed.py: streams the same events as the real seed, but never calls the
+# embedding API or writes to the database, so visitors can't burn through the free Gemini quota.
+# Keep titleFromPath, retrive.py imports it.
 
 MODALITY_BY_EXTENSION = {
 	".txt": "text",
@@ -12,10 +17,12 @@ MODALITY_BY_EXTENSION = {
 	".mp4": "video",
 }
 
-MEDIA_EMBEDDERS = {
-	"image": embedImage,
-	"audio": embedAudio,
-	"video": embedVideo,
+# Seconds each file pretends to take, so the progress bar moves like a real run where media embeds slower than text
+FAKE_EMBED_SECONDS = {
+	"text": (0.1, 0.3),
+	"image": (0.2, 0.5),
+	"audio": (0.4, 0.8),
+	"video": (0.6, 1.2),
 }
 
 def _raise(error):
@@ -36,35 +43,28 @@ def retriveSeedFiles():
 def titleFromPath(path):
 	return splitext(basename(path))[0].replace("-", " ").replace("_", " ")
 
-# Seeds the given paths, or every file under data/ when none are given
+# Pretends to seed the given paths, or every file under data/ when none are given
 def seed(files=None):
+	seedFiles = retriveSeedFiles()
 	if files is None:
-		files = retriveSeedFiles()
+		files = seedFiles
+	# Paths are matched against data/ instead of checked on disk, so the public demo can't be used
+	# to probe for files elsewhere; anything else fails the way a missing file does in the real seed
+	knownFiles = set(seedFiles)
 
 	total = len(files)
 	yield {"event": "start", "total": total}
 
 	for i, path in enumerate(files, start=1):
 		modality = MODALITY_BY_EXTENSION[splitext(path)[1].lower()]
+		if normpath(path) not in knownFiles:
+			raise FileNotFoundError(ENOENT, strerror(ENOENT), path)
 
-		print(f"[{i}/{total}] {modality}: {path}")
-		if modality == "text":
-			with open(path, encoding="utf-8") as f:
-				embedding = embedText(titleFromPath(path), f.read())
-		else:
-			embedding = MEDIA_EMBEDDERS[modality](path)
-
-		# Upsert on path, so seeding again refreshes rows instead of duplicating them
-		runSql("""
-			INSERT INTO documents (path, modality, embedding)
-			VALUES (%s, %s, %s)
-			ON CONFLICT (path) DO UPDATE SET
-				modality = EXCLUDED.modality,
-				embedding = EXCLUDED.embedding
-		""", (path, modality, embedding))
+		print(f"[{i}/{total}] {modality}: {path} (fake)")
+		sleep(uniform(*FAKE_EMBED_SECONDS[modality]))
 		yield {"event": "progress", "current": i, "total": total, "modality": modality, "path": path}
 
-	print(f"Seeded {total} files")
+	print(f"Fake seeded {total} files")
 	yield {"event": "done", "message": f"Seeded {total} files", "success": True, "count": total}
 
 if __name__ == "__main__":
