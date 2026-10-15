@@ -46,6 +46,11 @@ h3 {
 	overflow-wrap: break-word;
 }
 
+/* Keeps `hidden` working on elements whose rules set a display */
+[hidden] {
+	display: none !important;
+}
+
 /* ===== Base ===== */
 :root {
 	--color-bg: #f5f6f8;
@@ -55,6 +60,7 @@ h3 {
 	--color-border: #dce0e6;
 	--color-accent: #2f5bea;
 	--color-accent-soft: #e8eefd;
+	--color-error: #c62828;
 	--radius: 10px;
 }
 
@@ -85,13 +91,42 @@ h1 {
 	margin-bottom: 16px;
 }
 
-/* ===== Search form ===== */
-#searchForm {
-	display: flex;
-	gap: 8px;
+code {
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+	font-size: 15px;
 }
 
-#searchInput {
+/* ===== Nav ===== */
+.nav {
+	display: flex;
+	gap: 4px;
+	margin-bottom: 24px;
+}
+
+.nav a {
+	padding: 6px 14px;
+	border-radius: 999px;
+	color: var(--color-muted);
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.nav a:hover {
+	color: var(--color-text);
+}
+
+.nav a[aria-current="page"] {
+	background: var(--color-accent-soft);
+	color: var(--color-accent);
+}
+
+.nav a:focus-visible {
+	outline: 2px solid var(--color-accent);
+	outline-offset: 2px;
+}
+
+/* ===== Form controls ===== */
+.input {
 	flex: 1;
 	min-width: 0;
 	padding: 10px 14px;
@@ -100,7 +135,7 @@ h1 {
 	background: var(--color-surface);
 }
 
-#searchButton {
+.button {
 	padding: 10px 20px;
 	border: 0;
 	border-radius: var(--radius);
@@ -110,14 +145,21 @@ h1 {
 	cursor: pointer;
 }
 
-#searchInput:focus-visible,
-#searchButton:focus-visible {
+/* Inset shadow instead of a border, so it stays the same size as the filled button */
+.button.secondary {
+	background: var(--color-surface);
+	color: var(--color-accent);
+	box-shadow: inset 0 0 0 1px var(--color-accent);
+}
+
+.input:focus-visible,
+.button:focus-visible {
 	outline: 2px solid var(--color-accent);
 	outline-offset: 2px;
 }
 
-#searchInput:disabled,
-#searchButton:disabled {
+.input:disabled,
+.button:disabled {
 	opacity: 0.6;
 	cursor: not-allowed;
 }
@@ -127,6 +169,16 @@ h1 {
 	min-height: 24px;
 	margin: 12px 0;
 	color: var(--color-muted);
+}
+
+#status.error {
+	color: var(--color-error);
+}
+
+/* ===== Search form ===== */
+#searchForm {
+	display: flex;
+	gap: 8px;
 }
 
 /* ===== Results ===== */
@@ -184,7 +236,8 @@ h1 {
 	margin-top: auto;
 }
 
-.element .modality {
+/* Also used by the seed log */
+.modality {
 	padding: 2px 8px;
 	border-radius: 999px;
 	background: var(--color-accent-soft);
@@ -196,6 +249,159 @@ h1 {
 
 .element .id {
 	margin-left: auto;
+}
+
+/* ===== Seed ===== */
+.lead {
+	max-width: 720px;
+	margin-bottom: 24px;
+	color: var(--color-muted);
+}
+
+.seed-options {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+	gap: 16px;
+	align-items: start;
+}
+
+.panel {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	padding: 16px;
+	background: var(--color-surface);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius);
+}
+
+.panel h2 {
+	font-size: 20px;
+	font-weight: 600;
+	line-height: 1.3;
+}
+
+.panel p {
+	color: var(--color-muted);
+}
+
+.panel > .button {
+	align-self: flex-start;
+}
+
+#addForm {
+	display: flex;
+	gap: 8px;
+}
+
+#fileList,
+#log {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding: 0;
+	list-style: none;
+}
+
+#fileList:empty {
+	display: none;
+}
+
+#fileList li {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 4px 4px 4px 12px;
+	border: 1px solid var(--color-border);
+	border-radius: calc(var(--radius) - 4px);
+	background: var(--color-bg);
+}
+
+#fileList .path,
+#log .path {
+	flex: 1;
+	min-width: 0;
+	/* Paths have no spaces, so long ones would overflow without breaking anywhere */
+	overflow-wrap: anywhere;
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+	font-size: 14px;
+}
+
+.remove {
+	flex-shrink: 0;
+	width: 32px;
+	height: 32px;
+	border: 0;
+	border-radius: calc(var(--radius) - 4px);
+	background: transparent;
+	color: var(--color-muted);
+	font-size: 20px;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.remove:hover {
+	background: var(--color-border);
+	color: var(--color-text);
+}
+
+.remove:focus-visible {
+	outline: 2px solid var(--color-accent);
+	outline-offset: 2px;
+}
+
+.remove:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.seed-run {
+	margin-top: 24px;
+}
+
+#progress {
+	appearance: none;
+	display: block;
+	width: 100%;
+	height: 8px;
+	border: 0;
+	border-radius: 999px;
+	background: var(--color-border);
+	overflow: hidden;
+}
+
+#progress::-webkit-progress-bar {
+	background: var(--color-border);
+}
+
+#progress::-webkit-progress-value {
+	background: var(--color-accent);
+	transition: width 0.2s;
+}
+
+#progress::-moz-progress-bar {
+	background: var(--color-accent);
+}
+
+#log {
+	max-height: 360px;
+	margin-top: 16px;
+	overflow-y: auto;
+}
+
+#log li {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 14px;
+}
+
+#log .modality {
+	flex-shrink: 0;
+	/* Same width for every modality, so the paths line up */
+	min-width: 64px;
+	text-align: center;
+	font-size: 12px;
 }
 
 /* ===== Footer ===== */

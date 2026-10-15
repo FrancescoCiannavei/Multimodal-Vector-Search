@@ -46,7 +46,11 @@ def run_retrive(q):
 
 @app.get("/")
 def index():
-    return FileResponse("public/html/index.html")
+    return FileResponse("public/html/query.html")
+
+@app.get("/seed")
+def seed_page():
+    return FileResponse("public/html/seed.html")
 
 # Routes above take priority, so the static mount must come last
 app.mount("/", StaticFiles(directory="public", follow_symlink=True), name="public")

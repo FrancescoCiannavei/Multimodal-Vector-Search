@@ -11,10 +11,15 @@
 	</head>
 	<body>
 		<main class="wrapper">
+			<nav class="nav">
+				<a href="/" aria-current="page">Search</a>
+				<a href="/seed">Seed</a>
+			</nav>
+
 			<h1>Search</h1>
 			<form method="get" id="searchForm">
-				<input type="search" name="searchInput" id="searchInput" placeholder="Try &quot;Coffee&quot;, &quot;Gundam&quot; or &quot;Volcano&quot;" autocomplete="off" required />
-				<button type="submit" id="searchButton">Search</button>
+				<input type="search" class="input" name="searchInput" id="searchInput" placeholder="Try &quot;Coffee&quot;, &quot;Gundam&quot; or &quot;Volcano&quot;" autocomplete="off" required />
+				<button type="submit" class="button" id="searchButton">Search</button>
 			</form>
 			<p id="status" aria-live="polite"></p>
 			<div id="results"></div>

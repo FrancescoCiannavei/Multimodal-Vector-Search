@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Seed</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap" />
+		<link rel="stylesheet" href="/css/style.css" />
+	</head>
+	<body>
+		<main class="wrapper">
+			<nav class="nav">
+				<a href="/">Search</a>
+				<a href="/seed" aria-current="page">Seed</a>
+			</nav>
+
+			<h1>Seed</h1>
+			<p class="lead">Embeds files from <code>data/</code> and stores them in the database. Seeding a file again refreshes its row instead of duplicating it.</p>
+
+			<div class="seed-options">
+				<section class="panel">
+					<h2>Single files</h2>
+					<form id="addForm">
+						<input type="text" class="input" id="pathInput" placeholder="data/text/coffee.txt" aria-label="File path" autocomplete="off" spellcheck="false" required />
+						<button type="submit" class="button secondary" id="addButton">Add</button>
+					</form>
+					<p class="empty" id="emptyList">No files added yet.</p>
+					<ul id="fileList"></ul>
+					<button type="button" class="button" id="seedSelectedButton" disabled>Seed 0 files</button>
+				</section>
+
+				<section class="panel">
+					<h2>Every file</h2>
+					<p>Embeds every file found under <code>data/</code>.</p>
+					<button type="button" class="button" id="seedAllButton">Seed all files</button>
+				</section>
+			</div>
+
+			<section class="seed-run" aria-label="Seeding progress">
+				<p id="status" aria-live="polite"></p>
+				<progress id="progress" hidden></progress>
+				<ol id="log"></ol>
+			</section>
+		</main>
+
+		<footer class="footer">
+			<span class="credit">Demo by Francesco Ciannavei</span>
+			<span class="separator credit-separator">·</span>
+			<a target="_blank" href="https://www.ciannavei.dev">ciannavei.dev</a>
+			<span class="separator">·</span>
+			<a target="_blank" href="https://github.com/FrancescoCiannavei">github.com/FrancescoCiannavei</a>
+		</footer>
+
+		<script src="/js/seed.js"></script>
+	</body>
+</html>
