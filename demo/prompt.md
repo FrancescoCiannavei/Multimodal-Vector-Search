@@ -30,14 +30,18 @@ Then replace the contents of `src/seed.py` with `demo/fake_seed.py`.
 
 Only seeding is faked. Search (`/api/retrive`) still calls Gemini once per query, and that's intended: leave search, the embedders (`src/embed/`) and the database code alone.
 
-### 2. Warning banner
+### 2. Warning banners
 
-Insert the content of `demo/warning.html` into `public/html/seed.html`, under the `<p class="lead">` element and above the `<div class="seed-options">`.
-Re-indent it with tabs to match the surrounding markup.
-If either of those elements no longer exists, stop and ask me where the banner should go instead of guessing.
+Each page gets a banner explaining how the demo differs from a real install:
+
+- Insert the content of `demo/warning-seed.html` into `public/html/seed.html`, under the `<p class="lead">` element and above the `<div class="seed-options">`.
+- Insert the content of `demo/warning-retrive.html` into `public/html/query.html`, under the `<h1>` element and above the `<form id="searchForm">`. Search runs on Gemini instead of the local model, so its distances are higher and some results might not appear.
+
+Re-indent them with tabs to match the surrounding markup.
+If any of those elements no longer exists, stop and ask me where the banner should go instead of guessing.
 
 ## When you're done
 
-- `git diff main --stat` must only list `src/seed.py`, `public/html/seed.html` and files under `demo/`. If anything else changed, revert it or tell me why it had to.
+- `git diff main --stat` must only list `src/seed.py`, `public/html/seed.html`, `public/html/query.html` and files under `demo/`. If anything else changed, revert it or tell me why it had to.
 - From the repo root, check the fake seed streams events end to end: `python3 -c "import sys; sys.path.insert(0, 'src'); from seed import seed; print(list(seed(['data/text/coffee.txt'])))"`
 - Don't commit or push, leave the changes for me to review.
