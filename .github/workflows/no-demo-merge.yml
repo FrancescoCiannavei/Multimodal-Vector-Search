@@ -1,0 +1,20 @@
+name: no-demo-merge
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Refuse demo branches
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          case "$HEAD_REF" in
+            demo|demo/*)
+              echo "::error::'$HEAD_REF' is a demo branch and must never be merged into main"
+              exit 1
+              ;;
+          esac
