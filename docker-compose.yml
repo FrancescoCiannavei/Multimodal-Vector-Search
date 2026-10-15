@@ -49,6 +49,7 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4
+    profiles: ["pgadmin"]
     restart: unless-stopped
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
