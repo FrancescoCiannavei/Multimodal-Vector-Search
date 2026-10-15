@@ -19,6 +19,8 @@ RUN useradd --create-home appuser
 
 COPY --chown=appuser:appuser src/ src/
 COPY --chown=appuser:appuser public/ public/
+# public/favicon.svg is a symlink to it
+COPY --chown=appuser:appuser logo.svg .
 
 USER appuser
 

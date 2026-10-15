@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round">
+	<!-- Prism: four modalities (text, image, audio, video) go in, one vector comes out -->
+	<style>
+		.ink { stroke: #1c2230; }
+		.blue { stroke: #2f5bea; }
+		.teal { stroke: #0f9f8f; }
+		.amber { stroke: #f2a516; }
+		@media (prefers-color-scheme: dark) {
+			.ink { stroke: #eef1f7; }
+			.blue { stroke: #6f8dff; }
+			.teal { stroke: #2cc4b0; }
+			.amber { stroke: #f6b73c; }
+		}
+	</style>
+	<g stroke-width="3.5">
+		<path class="ink" d="M3 13L24.5 21.9" />
+		<path class="blue" d="M3 24L21.7 26.7" />
+		<path class="teal" d="M3 35L18 33.2" />
+		<path class="amber" d="M3 46L12.8 42.2" />
+	</g>
+	<!-- The rays inside the prism are faded with opacity rather than covered by a fill, so the icon works on any background -->
+	<g stroke-width="3.5" opacity="0.3">
+		<path class="ink" d="M24.5 21.9L44 30" />
+		<path class="blue" d="M21.7 26.7L44 30" />
+		<path class="teal" d="M18 33.2L44 30" />
+		<path class="amber" d="M12.8 42.2L44 30" />
+	</g>
+	<path class="ink" d="M32 9L54 47H10Z" stroke-width="4" />
+	<path class="blue" d="M44 30H61" stroke-width="5" />
+</svg>
