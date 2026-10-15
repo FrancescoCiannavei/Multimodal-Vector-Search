@@ -4,3 +4,6 @@ pgvector
 sentence-transformers>=6.1.0
 # Torchvision's decoder can't read .avif
 Pillow
+# Used only when RUN_VECTOR_MODEL_LOCALLY is set to false in the .env
+# You can remove this if you plan to only run the model locally
+google-genai>=1.72.0

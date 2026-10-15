@@ -1,6 +1,6 @@
 from os import environ
 from db import runSql
-from embeddings import embedQuery
+from embed.manager import embedQuery
 from seed import titleFromPath
 
 def retrive(query, limit=10):
